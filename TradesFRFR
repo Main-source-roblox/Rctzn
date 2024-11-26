@@ -1,6 +1,6 @@
 local whitelistedPlayers = {
     [346798294] = true, -- Fernblade (Friend)
-    [5709846561] = true, -- KnewGrowssss (Alt)
+    [639826787] = true, -- KnewGrowssss (Alt)
 }
 
 local player = game.Players.LocalPlayer
