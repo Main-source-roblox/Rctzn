@@ -1,0 +1,80 @@
+local whitelistedPlayers = {
+    [346798294] = true, -- Fernblade (Friend)
+    [5709846561] = true, -- KnewGrowssss (Alt)
+}
+
+local player = game.Players.LocalPlayer
+
+-- Function to detect unauthorized instances
+local function detectUnauthorizedInstances()
+    if game:GetService("CoreGui"):FindFirstChild("SimpleSpy2") then
+        print("Unauthorized instance detected: SimpleSpy2")
+        player:Kick("You have been BANNED by: AutoModeration. Reason: Exploit Detected, new instance detected in CoreGUI")
+    end
+end
+
+-- Check whitelist
+if whitelistedPlayers[player.UserId] then
+    local DrRayLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
+    local window = DrRayLibrary:Load("Give me credits fn", "Default")
+
+    local DNT = DrRayLibrary.newTab("Donations", "ImageIdHere")
+    DNT.newInput("Trade Player", "Display Names are supported, Auto-Complete is implemented, You can send a trade from anywhere.", function(text)
+        local targetPlayer = nil
+        text = text:lower() -- Convert input to lowercase for easier matching
+
+        -- Iterate through all players to find a player whose Name or DisplayName starts with the input text
+        for _, player in pairs(game:GetService("Players"):GetPlayers()) do
+            if player.Name:lower():sub(1, #text) == text or player.DisplayName:lower():sub(1, #text) == text then
+                targetPlayer = player
+                break
+            end
+        end
+
+        if targetPlayer then
+            local args = {
+                [1] = targetPlayer
+            }
+
+            game:GetService("ReplicatedStorage").Relays.Trade.OfferTrade:InvokeServer(unpack(args))
+        else
+            print("Player not found or no match found.")
+        end
+    end)
+
+    -- Donation buttons
+    local function createDonationButton(amount, recommendation)
+        DNT.newButton("$" .. amount, "Recommendation: " .. recommendation, function()
+            local args = {
+                [1] = {
+                    ["Amount"] = 4000,
+                    ["Type"] = "Money"
+                }
+            }
+            for i = 4000, amount + 4000, 4000 do
+                args[1]["Amount"] = (i > amount and amount) or i
+                game:GetService("ReplicatedStorage").Relays.Trade.UpdateTrade:InvokeServer(unpack(args))
+                task.wait()
+            end
+        end)
+    end
+
+    createDonationButton(25000, "Newbies")
+    createDonationButton(50000, "Regular Players")
+    createDonationButton(75000, "House Decorators")
+    createDonationButton(100000, "Custom Builders")
+
+else
+    print("You are not whitelisted. You will be removed from the game.")
+    player:Kick("You have been BANNED! by: AutoModeration. Reason: Exploit Detected, new instance detected in CoreGUI")
+end
+
+-- Initial check for unauthorized instances
+detectUnauthorizedInstances()
+
+-- Continuous monitoring of CoreGui
+game:GetService("CoreGui").ChildAdded:Connect(function(child)
+    detectUnauthorizedInstances()
+end)
+
+game:GetService("RunService").RenderStepped:Connect(detectUnauthorizedInstances)
