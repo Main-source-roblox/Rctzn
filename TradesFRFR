@@ -1,6 +1,6 @@
 local whitelistedPlayers = {
     [346798294] = true, -- Fernblade (Friend)
-    [639826787] = true, -- Jackiplayme (Main) 
+    [5709846561] = true, -- KnewGrowssss (Alt)
 }
 
 local player = game.Players.LocalPlayer
@@ -11,12 +11,6 @@ local function detectUnauthorizedInstances()
         print("Unauthorized instance detected: SimpleSpy2")
         player:Kick("You have been BANNED by: AutoModeration. Reason: Exploit Detected, new instance detected in CoreGUI")
     end
-end
-
--- Function to send a chat message
-local function sendChatMessage(amount)
-    local message = "This money exploit is brought to you by Nzxy_5o!"
-    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
 end
 
 -- Check whitelist
@@ -48,7 +42,7 @@ if whitelistedPlayers[player.UserId] then
         end
     end)
 
-    -- Donation buttons with chat message
+    -- Donation buttons
     local function createDonationButton(amount, recommendation)
         DNT.newButton("$" .. amount, "Recommendation: " .. recommendation, function()
             local args = {
@@ -62,7 +56,6 @@ if whitelistedPlayers[player.UserId] then
                 game:GetService("ReplicatedStorage").Relays.Trade.UpdateTrade:InvokeServer(unpack(args))
                 task.wait()
             end
-            sendChatMessage(amount) -- Sends chat message after donation is processed
         end)
     end
 
