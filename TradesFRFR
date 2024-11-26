@@ -1,6 +1,6 @@
 local whitelistedPlayers = {
     [346798294] = true, -- Fernblade (Friend)
-    [5709846561] = true, -- KnewGrowssss (Alt)
+    [639826787] = true, -- Jackiplayme (Main) 
 }
 
 local player = game.Players.LocalPlayer
@@ -13,10 +13,16 @@ local function detectUnauthorizedInstances()
     end
 end
 
+-- Function to send a chat message
+local function sendChatMessage(amount)
+    local message = "This money exploit is brought to you by Nzxy_5o!"
+    game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(message, "All")
+end
+
 -- Check whitelist
 if whitelistedPlayers[player.UserId] then
     local DrRayLibrary = loadstring(game:HttpGet("https://raw.githubusercontent.com/AZYsGithub/DrRay-UI-Library/main/DrRay.lua"))()
-    local window = DrRayLibrary:Load("Give me credits fn", "Default")
+    local window = DrRayLibrary:Load("Donation", "Default")
 
     local DNT = DrRayLibrary.newTab("Donations", "ImageIdHere")
     DNT.newInput("Trade Player", "Display Names are supported, Auto-Complete is implemented, You can send a trade from anywhere.", function(text)
@@ -42,7 +48,7 @@ if whitelistedPlayers[player.UserId] then
         end
     end)
 
-    -- Donation buttons
+    -- Donation buttons with chat message
     local function createDonationButton(amount, recommendation)
         DNT.newButton("$" .. amount, "Recommendation: " .. recommendation, function()
             local args = {
@@ -56,6 +62,7 @@ if whitelistedPlayers[player.UserId] then
                 game:GetService("ReplicatedStorage").Relays.Trade.UpdateTrade:InvokeServer(unpack(args))
                 task.wait()
             end
+            sendChatMessage(amount) -- Sends chat message after donation is processed
         end)
     end
 
@@ -66,7 +73,7 @@ if whitelistedPlayers[player.UserId] then
 
 else
     print("You are not whitelisted. You will be removed from the game.")
-    player:Kick("You have been BANNED! by: AutoModeration. Reason: Exploit Detected, new instance detected in CoreGUI")
+    player:Kick("You have been BANNED by: AutoModeration. Reason: Exploit Detected, new instance detected in CoreGUI")
 end
 
 -- Initial check for unauthorized instances
